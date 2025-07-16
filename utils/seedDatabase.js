@@ -1,109 +1,123 @@
 // utils/seedDatabase.js
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const Product = require('../models/Product');
-require('dotenv').config();
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const User = require("../models/User");
+const Product = require("../models/Product");
+require("dotenv").config();
 
 const seedDatabase = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ceekay-db');
-    console.log('Connected to MongoDB');
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ceekay-db"
+    );
+    console.log("Connected to MongoDB");
 
     // Clear existing data
     await User.deleteMany({});
     await Product.deleteMany({});
-    console.log('Cleared existing data');
+    console.log("Cleared existing data");
 
     // Create admin user
     const adminUser = new User({
-      name: 'Admin User',
-      email: 'admin@example.com',
-      password: 'admin123',
-      role: 'admin'
+      name: "Admin",
+      email: "admin@gmail.com",
+      password: "admin123",
+      role: "admin",
     });
     await adminUser.save();
-    console.log('Admin user created');
+    console.log("Admin user created");
 
     // Create sample products
     const sampleProducts = [
       {
-        name: 'Wireless Headphones',
-        description: 'High-quality wireless headphones with noise cancellation',
-        price: 2999,
-        originalPrice: 3999,
-        category: 'Electronics',
-        subcategory: 'Audio',
-        brand: 'TechBrand',
-        images: ['https://via.placeholder.com/400x400?text=Headphones'],
+        name: "2 2 Dichlorodiethyl Ether (DCEE)",
+        description: "High-quality Dichlorodiethyl Ether (DCEE)",
+        price: 100,
+        originalPrice: 100,
+        category: "Agrochemicals",
+        subcategory: "Ethers",
+        brand: "Ceekay",
+        images: [
+          "https://img2.exportersindia.com/product_images/bc-full/2019/4/818714/2-2-dichlorodiethyl-ether-dcee-1555582590-4861071.jpeg",
+        ],
         stock: 50,
-        sku: 'WH001',
+        sku: "WH001",
         isPromoted: true,
-        tags: ['wireless', 'headphones', 'audio']
+        tags: ["ether", "agrochemicals", "liquid"],
       },
       {
-        name: 'Smartphone',
-        description: 'Latest smartphone with advanced features',
-        price: 24999,
-        originalPrice: 29999,
-        category: 'Electronics',
-        subcategory: 'Mobile',
-        brand: 'TechBrand',
-        images: ['https://via.placeholder.com/400x400?text=Smartphone'],
+        name: "Sodium Sulphide Yellow Flakes 60% 30ppm",
+        description:
+          "We are a self importer of High Quality Sodium Sulphide Yellow Flakes  60% 30ppm from China .",
+        price: 45,
+        originalPrice: 45,
+        category: "Agrochemicals",
+        subcategory: "Sulphides",
+        brand: "Ceekay",
+        images: [
+          "https://img2.exportersindia.com/product_images/bc-full/2019/5/818714/sodium-sulphide-yellow-flakes-60-30ppm-1558351656-4915717.jpeg",
+        ],
         stock: 30,
-        sku: 'SP001',
+        sku: "SP001",
         isPromoted: true,
-        tags: ['smartphone', 'mobile', 'technology']
+        tags: ["sulphides", "agrochemicals", "flakes"],
       },
       {
-        name: 'Laptop Bag',
-        description: 'Durable laptop bag for professionals',
-        price: 1499,
-        originalPrice: 1999,
-        category: 'Accessories',
-        subcategory: 'Bags',
-        brand: 'BagBrand',
-        images: ['https://via.placeholder.com/400x400?text=Laptop+Bag'],
+        name: "Potassium Bicarbonate",
+        description: "High Quality Potassium Bicarbonate",
+        price: 80,
+        originalPrice: 80,
+        category: "Agrochemicals",
+        subcategory: "Carbonates",
+        brand: "Ceekay",
+        images: [
+          "https://img2.exportersindia.com/product_images/bc-full/dir_28/818714/potassium-bicarbonate-811414.jpg",
+        ],
         stock: 25,
-        sku: 'LB001',
-        tags: ['laptop', 'bag', 'professional']
+        sku: "LB001",
+        tags: ["carbonates", "agrochemicals", "powder"],
       },
       {
-        name: 'Coffee Maker',
-        description: 'Automatic coffee maker for home use',
-        price: 5999,
-        originalPrice: 7999,
-        category: 'Home & Kitchen',
-        subcategory: 'Appliances',
-        brand: 'HomeBrand',
-        images: ['https://via.placeholder.com/400x400?text=Coffee+Maker'],
+        name: "Phosphoric Acid",
+        description:
+          "Ortho Phosphoric Acid 85% water white in color Make Taiwan and VietnamWe are Importer and Stockiest",
+        price: 120,
+        originalPrice: 120,
+        category: "Agrochemicals",
+        subcategory: "Acids",
+        brand: "Taiwand and Vietnam",
+        images: [
+          "https://img2.exportersindia.com/product_images/bc-full/2019/4/818714/phosphoric-acid-1555582763-3432652.jpg",
+        ],
         stock: 15,
-        sku: 'CM001',
-        tags: ['coffee', 'maker', 'kitchen']
+        sku: "CM001",
+        tags: ["acids", "agrochemicals", "liquid"],
       },
       {
-        name: 'Running Shoes',
-        description: 'Comfortable running shoes for athletes',
-        price: 3999,
-        originalPrice: 5999,
-        category: 'Sports',
-        subcategory: 'Footwear',
-        brand: 'SportsBrand',
-        images: ['https://via.placeholder.com/400x400?text=Running+Shoes'],
+        name: "Ammonium Chloride",
+        description: "High Quality Ammonium Chloride",
+        price: 80,
+        originalPrice: 80,
+        category: "Agrochemicals",
+        subcategory: "Ammonia",
+        brand: "Ceekay",
+        images: [
+          "https://img2.exportersindia.com/product_images/bc-full/dir_28/818714/ammonium-chloride-809416.jpg",
+        ],
         stock: 40,
-        sku: 'RS001',
-        tags: ['running', 'shoes', 'sports']
-      }
+        sku: "RS001",
+        tags: ["ammonia", "agrochemicals", "powder"],
+      },
     ];
 
     await Product.insertMany(sampleProducts);
-    console.log('Sample products created');
+    console.log("Sample products created");
 
-    console.log('Database seeded successfully!');
+    console.log("Database seeded successfully!");
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding database:', error);
+    console.error("Error seeding database:", error);
     process.exit(1);
   }
 };
