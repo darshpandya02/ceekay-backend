@@ -1,5 +1,5 @@
 /*
-# E-commerce Backend API
+# Ceekay Enterprise Backend API
 
 A complete backend service for an e-commerce mobile application built with Node.js, Express, and MongoDB.
 
