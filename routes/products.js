@@ -9,27 +9,40 @@ const router = express.Router();
 // Get all products
 router.get('/', async (req, res) => {
   try {
-    const { page = 1, limit = 10, category, sort = 'createdAt', order = 'desc' } = req.query;
-    
+    const {
+      page = 1,
+      limit = 10,
+      category,
+      sort = "createdAt",
+      order = "desc",
+    } = req.query;
+
     const filter = { isActive: true };
-    if (category) filter.category = new RegExp(category, 'i');
+    if (category) filter.category = new RegExp(category, "i");
 
     const sortObj = {};
-    sortObj[sort] = order === 'desc' ? -1 : 1;
+    sortObj[sort] = order === "desc" ? -1 : 1;
 
     const products = await Product.find(filter)
       .sort(sortObj)
       .limit(limit * 1)
-      .skip((page - 1) * limit);
+      .skip((page - 1) * limit)
+      .lean(); // <-- returns plain JS objects
+
+    const transformed = products.map((p) => ({
+      ...p,
+      id: p._id.toString(),
+    }));
 
     const total = await Product.countDocuments(filter);
 
     res.json({
-      products,
+      products: transformed,
       totalPages: Math.ceil(total / limit),
       currentPage: page,
-      total
+      total,
     });
+    
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
