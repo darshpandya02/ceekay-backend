@@ -48,7 +48,8 @@ router.post('/signup', [
         name: user.name,
         email: user.email,
         phone: user.phone,
-        companyName: user.companyName
+        companyName: user.companyName,
+        role: user.role
       }
     });
   } catch (error) {
@@ -91,7 +92,8 @@ router.post('/login', [
         name: user.name,
         email: user.email,
         phone: user.phone,
-        companyName: user.companyName
+        companyName: user.companyName,
+        role: user.role
       }
     });
   } catch (error) {

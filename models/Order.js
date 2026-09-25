@@ -68,8 +68,8 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-// Generate order number before saving
-orderSchema.pre("save", function (next) {
+// Generate order number before validation (it is a required field)
+orderSchema.pre("validate", function (next) {
   if (!this.orderNumber) {
     this.orderNumber =
       "ORD-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9);

@@ -30,6 +30,35 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Admin: get all orders across customers
+router.get('/admin/all', async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    const { page = 1, limit = 50 } = req.query;
+
+    const orders = await Order.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .populate('items.product')
+      .populate('user', 'name email companyName');
+
+    const total = await Order.countDocuments({});
+
+    res.json({
+      orders,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      total
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Get order by ID
 router.get('/:id', async (req, res) => {
   try {
@@ -66,9 +95,12 @@ router.post('/', async (req, res) => {
     const orderItems = [];
 
     for (const item of items) {
-      const product = await Product.findById(item.product || item.productId);
+      // Cart items may carry the populated product document instead of its id
+      const productRef = item.product || item.productId;
+      const productId = productRef && typeof productRef === 'object' ? (productRef._id || productRef.id) : productRef;
+      const product = await Product.findById(productId);
       if (!product || !product.isActive) {
-        return res.status(404).json({ message: `Product ${item.product || item.productId} not found` });
+        return res.status(404).json({ message: `Product ${productId} not found` });
       }
 
       if (product.stock < item.quantity) {

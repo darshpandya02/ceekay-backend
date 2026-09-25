@@ -159,6 +159,26 @@ The application is ready for deployment on platforms like:
 
 Make sure to set environment variables in your deployment platform.
 
+### Vercel demo
+
+A public demo runs at https://ceekay-chem-api.vercel.app (health check: `/api/health`).
+`api/index.js` wraps the Express app from `app.js` as a Vercel Function and caches the
+MongoDB connection across invocations. `server.js` is unchanged for long-running hosts.
+
+Environment variables:
+
+- `MONGODB_URI` - connection string including the database name in the path
+- `JWT_SECRET` - random secret used to sign tokens
+- `FRONTEND_URL` - allowed CORS origin(s), comma separated
+- `GROQ_API_KEY` - optional; without it `POST /api/assistant` returns a 503 "unavailable in this demo" message
+
+Seed the demo database (sample products, a demo admin and a demo customer). This does not
+touch `utils/seedDatabase.js`:
+
+```bash
+MONGODB_URI=... DEMO_ADMIN_PASSWORD=... DEMO_CUSTOMER_PASSWORD=... npm run seed:demo
+```
+
 ## License
 
 MIT License
